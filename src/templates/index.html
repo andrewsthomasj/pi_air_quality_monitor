@@ -20,7 +20,22 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <canvas id="historicalChart" width="400" height="200"></canvas>
+                <canvas id="hourlyChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <canvas id="dailyChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <canvas id="monthlyChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <canvas id="yearlyChart" width="400" height="200"></canvas>
             </div>
         </div>
     </div>
@@ -33,12 +48,58 @@
     <script>
         
         $.getJSON('http://10.0.0.172:8000/api/', function(data) {
-            var ctx = document.getElementById('historicalChart').getContext('2d');
-            var historicalChart = new Chart(ctx, {
+            var hourlyElement = document.getElementById('hourlyChart').getContext('2d');
+            var dailyElement = document.getElementById('dailyChart').getContext('2d');
+            var monthlyElement = document.getElementById('monthlyChart').getContext('2d');
+            var yearlyElement = document.getElementById('yearlyChart').getContext('2d');
+
+            var hourlyChart = new Chart(hourlyElement, {
                 type: 'line',
                 data: {
-                    labels: data.historical.labels,
-                    datasets: [data.historical.pm10, data.historical.pm2]
+                    labels: data.hour.labels,
+                    datasets: [data.hour.pm10, data.hour.pm2]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            var dailyChart = new Chart(dailyElement, {
+                type: 'line',
+                data: {
+                    labels: data.day.labels,
+                    datasets: [data.day.pm10, data.day.pm2]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            var monthlyChart = new Chart(monthlyElement, {
+                type: 'line',
+                data: {
+                    labels: data.month.labels,
+                    datasets: [data.month.pm10, data.month.pm2]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            var yearlyChart = new Chart(yearlyElement, {
+                type: 'line',
+                data: {
+                    labels: data.year.labels,
+                    datasets: [data.year.pm10, data.year.pm2]
                 },
                 options: {
                     scales: {
@@ -49,8 +110,6 @@
                 }
             });
         })
-        
-        
         </script>
         
 

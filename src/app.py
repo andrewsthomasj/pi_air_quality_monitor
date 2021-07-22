@@ -7,15 +7,15 @@ import redis
 import atexit
 from flask_cors import CORS, cross_origin
 
-
-
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 aqm = AirQualityMonitor()
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=aqm.save_measurement_to_redis, trigger="interval", seconds=60)
+scheduler.add_job(func=aqm.save_measurement_to_redis("minute"), trigger="interval", seconds=60)
+scheduler.add_job(func=aqm.save_measurement_to_redis("hour"), trigger="interval", seconds=3600)
+scheduler.add_job(func=aqm.save_measurement_to_redis("day"), trigger="cron", hour=12)
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
 
@@ -23,7 +23,6 @@ atexit.register(lambda: scheduler.shutdown())
 def reconfigure_data(measurement):
     """Reconfigures data for chart.js"""
     current = int(time.time())
-    measurement = measurement[:30]
     measurement.reverse()
     return {
         'labels': [x['measurement']['timestamp'] for x in measurement],
@@ -47,7 +46,10 @@ def reconfigure_data(measurement):
 def index():
     """Index page for the application"""
     context = {
-        'historical': reconfigure_data(aqm.get_last_n_measurements()),
+        'hour': reconfigure_data(aqm.get_historic_values('minute', 60)),
+        'day': reconfigure_data(aqm.get_historic_values('hour', 24)),
+        'month': reconfigure_data(aqm.get_historic_values('day', 31)),
+        'year': reconfigure_data(aqm.get_historic_values('day', 365)),
     }
     return render_template('index.html', context=context)
 
@@ -58,19 +60,12 @@ def index():
 def api():
     """Returns historical data from the sensor"""
     context = {
-        'historical': reconfigure_data(aqm.get_last_n_measurements()),
+        'hour': reconfigure_data(aqm.get_historic_values('minute', 60)),
+        'day': reconfigure_data(aqm.get_historic_values('hour', 24)),
+        'month': reconfigure_data(aqm.get_historic_values('day', 31)),
+        'year': reconfigure_data(aqm.get_historic_values('day', 365)),
     }
     return jsonify(context)
-
-
-@app.route('/api/now/')
-def api_now():
-    """Returns latest data from the sensor"""
-    context = {
-        'current': aqm.get_measurement(),
-    }
-    return jsonify(context)
-
 
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False, host='0.0.0.0', port=int(os.environ.get('PORT', '8000')))
