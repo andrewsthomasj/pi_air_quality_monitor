@@ -37,4 +37,10 @@ class AirQualityMonitor():
 
     def save_measurement_to_redis(self, granularity):
         """Saves measurement to redis db for the given 'granularity'"""
-        redis_client.lpush(granularity, json.dumps(self.get_measurement(), default=str))
+        if (granularity == 'minute') {
+            redis_client.lpush(granularity, json.dumps(self.get_current_value(), default=str))
+        } else if (granularity == 'hour') {
+            redis_client.lpush(granularity, json.dumps(self.get_average_value('minute', 60), default=str))
+        } else if (granularity == 'day') {
+            redis_client.lpush(granularity, json.dumps(self.get_average_value('hour', 24), default=str))
+        }
