@@ -39,6 +39,7 @@
             </div>
         </div>
     </div>
+    <p id="log"></p>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
@@ -49,6 +50,7 @@
         
         $.getJSON('http://10.0.0.172:8000/api/', function(data) {
             var ctx = document.getElementById('hourlyChart').getContext('2d');
+            document.getElementById('log').textContent = JSON.stringify(data, undefined, 2);
             var hourlyChart = new Chart(ctx, {
                 type: 'line',
                 data: {
