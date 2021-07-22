@@ -6,7 +6,7 @@ services:
       - ./data/redis:/data
   web:
     build: .
-    image: pi-air-quality-monitor
+    image: custom-pi-air-quality-monitor
     devices:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
     environment:
