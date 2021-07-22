@@ -19,11 +19,11 @@ class AirQualityMonitor():
             'measurement': self.sds.read_measurement(),
         }
 
-    def get_historic_values(self, granularity, n)
+    def get_historic_values(self, granularity, n):
         """Returns the last 'n' datapoints from the 'granularity' redis"""
         return [json.loads(x) for x in redis_client.lrange(granularity, 0, n-1)]
 
-    def get_average_value(self, granularity, n)
+    def get_average_value(self, granularity, n):
         """returns the average value from the last 'n' datapoints at 'granularity'"""
         list = self.get_historic_values(granularity, n)
         list_pm10 = (element['measurement']['pm10'] for element in list)
