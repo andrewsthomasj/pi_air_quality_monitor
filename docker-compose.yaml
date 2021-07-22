@@ -11,10 +11,10 @@ services:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
     environment:
         - REDIS_HOST=redis
-        - PORT=8000
+        - PORT=8001
     volumes:
       - ./src:/code
     depends_on:
       - "redis"
     ports:
-      - "8000:8000"
+      - "8001:8001"
