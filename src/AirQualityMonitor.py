@@ -34,8 +34,11 @@ class AirQualityMonitor():
         avg_pm2_5 = 0
         if len(list_pm2_5) > 0:
             avg_pm2_5 = sum(list_pm2_5) / len(list_pm2_5)
+        time = 0
+        if len(list) > 0:
+            time = list[0]['time']
         return {
-            'time': list[0]['time'],
+            'time': time,
             'measurement': { 'pm10': avg_pm10, 'pm2.5': avg_pm2_5 },
         }
 
