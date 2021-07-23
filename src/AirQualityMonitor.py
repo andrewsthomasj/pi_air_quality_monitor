@@ -29,10 +29,10 @@ class AirQualityMonitor():
         list_pm10 = [x['measurement']['pm10'] for x in list]
         list_pm2_5 = [x['measurement']['pm2.5'] for x in list]
         avg_pm10 = 0
-        if len(list_pm10) > 0
+        if len(list_pm10) > 0:
             avg_pm10 = sum(list_pm10) / len(list_pm10)
         avg_pm2_5 = 0
-        if len(list_pm2_5) > 0
+        if len(list_pm2_5) > 0:
             avg_pm2_5 = sum(list_pm2_5) / len(list_pm2_5)
         return {
             'time': list[0]['time'],
