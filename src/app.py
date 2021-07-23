@@ -71,8 +71,8 @@ def api():
 def avg():
     """Returns avg data"""
     context = {
-        'hour': reconfigure_data(aqm.get_average_value('minute', 60)),
-        'day': reconfigure_data(aqm.get_average_value('hour', 24))
+        'hour': aqm.get_average_value('minute', 60),
+        'day': aqm.get_average_value('hour', 24)
     }
     return jsonify(context)
 
