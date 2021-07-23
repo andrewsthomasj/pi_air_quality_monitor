@@ -25,7 +25,7 @@ def reconfigure_data(measurement):
     current = int(time.time())
     measurement.reverse()
     return {
-        'labels': [x['measurement']['timestamp'] for x in measurement],
+        'labels': [x['time'] for x in measurement],
         'pm10': {
             'label': 'pm10',
             'data': [x['measurement']['pm10'] for x in measurement],
@@ -71,8 +71,8 @@ def api():
 def avg():
     """Returns avg data"""
     context = {
-        'hour': aqm.get_average_value('minute', 60),
-        'day': aqm.get_average_value('hour', 24)
+        'hour': reconfigure_data(aqm.get_average_value('minute', 60)),
+        'day': reconfigure_data(aqm.get_average_value('hour', 24))
     }
     return jsonify(context)
 
