@@ -26,14 +26,8 @@ class AirQualityMonitor():
     def get_average_value(self, granularity, n):
         """returns the average value from the last 'n' datapoints at 'granularity'"""
         list = self.get_historic_values(granularity, n)
-        list_pm10 = (element['measurement']['pm10'] for element in list)
-        list_pm2_5 = (element['measurement']['pm2.5'] for element in list)
-        avg_pm10 = sum(list_pm10) / len(list_pm10)
-        avg_pm2_5 = sum(list_pm2_5) / len(list_pm2_5)
-        return {
-            'time': list[0]['time'],
-            'measurement': { 'pm10': avg_pm10, 'pm2.5': avg_pm2_5 },
-        }
+        return list
+
 
     def save_measurement_to_redis(self, granularity):
         """Saves measurement to redis db for the given 'granularity'"""
